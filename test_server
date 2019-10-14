@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo ""
+echo "#####################################################"
+echo "Démarrage d'un serveur de test à l'emplacement actuel"
+echo "#####################################################"
+echo ""
+
+python3 -m http.server 8080 -b localhost
