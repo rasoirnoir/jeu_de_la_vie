@@ -10,3 +10,10 @@
     background-color:yellow;
     font-weight:bold; color:red;
 }
+
+.grid td.black{
+  background-color: black;
+}
+.grid td.white{
+  background-color: white;
+}
