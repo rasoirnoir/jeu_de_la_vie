@@ -1,8 +1,9 @@
-var lastClicked;
+
 var taille = 20; // on décide que la grille sera toujours un carré
-var nbImagesSecs = 10;
+var nbImagesSecs = 1;
 var jeu = matrice(taille);
-console.log(jeu);
+var nbIte = 0;
+//console.log(jeu);
 var grid = clickableGrid(taille,function(el,row,col){
     console.log("You clicked on element:",el);
     console.log("You clicked on row:",row);
@@ -10,14 +11,14 @@ var grid = clickableGrid(taille,function(el,row,col){
 
     if(el.className == 'black'){
       el.className = 'white';
+      jeu[row][col] = 0;
     }
     else{
       el.className = 'black';
+      jeu[row][col] = 1;
     }
-    //el.className='clicked';
-    //if (lastClicked) lastClicked.className='';
-    lastClicked = el;
 });
+
 
 document.body.appendChild(grid);
 
@@ -81,10 +82,78 @@ function stopper(){
 
   //TODO: arrêter la simulation
   window.clearInterval(intervalID);
+  nbIte = 0;
 
 }
 
 function iterationSimu(){
   //TODO: calculer chaque itération du jeu
-  console.log("Itération du jeu !");
+  console.log(`Itération ${nbIte+1} du jeu !`);
+
+  //chaque itération se déroulera en 2 phases
+  //calcul sur la matrice
+  //Mise à jour visuel de la grille
+  console.log(jeu);
+  var matriceSuivante = calculMatriceSuivante();
+  jeu = matriceSuivante;
+  console.log(jeu);
+
+  gridIteration(jeu);
+  nbIte++;
+  document.getElementById("compteur").innerHTML = nbIte;
+
+}
+
+//Implémentation des règles du jeu de la vie
+function calculMatriceSuivante(){
+  var nextIte = [];
+  for(var r = 0; r < taille; r++){
+    var column = [];
+    for(var c = 0; c < taille; c++){
+      /*
+      1) La cellule survie si elle est entourée de 2 ou 3 voisines. Sinon elle meure
+      2) la cellule nait si elle est entourée d'exactement 3 voisines
+      */
+      //Récupération du nombre de voisines vivantes
+      var nbVoisinesVivantes = 0;
+      for(var i = -1; i <= 1; i++){
+        if(!(r+i < 0 || r+i >= taille)){
+          for(var j = -1; j <= 1; j++){
+            if(!(c+j < 0 || c+j >= taille)){
+              if(jeu[r+i][c+j] == 1 && !(i == 0 && j == 0)){
+                nbVoisinesVivantes++;
+              }
+            }
+          }
+        }
+      }
+
+      if((nbVoisinesVivantes == 3) || (nbVoisinesVivantes == 2 && jeu[r][c] == 1)){
+        column[c] = 1;
+      }
+      else{
+        column[c] = 0;
+      }
+
+    }
+    nextIte[r] = column;
+  }
+  return nextIte;
+}
+
+//Mise à jour visuel de la grille à partir de la matrice passée en paramètre
+function gridIteration(matrice){
+  for(var i = 0; i < taille; i++){
+    for(var j = 0; j < taille; j++){
+      if(matrice[i][j] == 0){
+        //Récupérer la cellule dans le DOM !!
+        //grid[i][j].className = 'white';
+        grid.rows[i].getElementsByTagName("td")[j].className = 'white';
+      }
+      else{
+        //grid[i][j].className = 'black';
+        grid.rows[i].getElementsByTagName("td")[j].className = 'black';
+      }
+    }
+  }
 }
