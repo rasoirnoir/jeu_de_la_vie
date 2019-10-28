@@ -2,6 +2,7 @@
 var taille = 20; // on décide que la grille sera toujours un carré
 var nbImagesSecs = 2;
 var jeu = matrice(taille);
+var jeuDepart = jeu;
 var nbIte = 0;
 //console.log(jeu);
 
@@ -24,7 +25,9 @@ var grid = clickableGrid(taille,function(el,row,col){
 
 document.body.appendChild(grid);
 
-document.getElementById("theButton").addEventListener("click", demarrer);
+document.getElementById("theButton").addEventListener("click", Demarrer);
+document.getElementById("reset").addEventListener("click", Reset);
+
 
 //Définition d'une grille clickable (par défault, toutes les cellules sont blanches)
 function clickableGrid(_taille, callback ){
@@ -65,12 +68,12 @@ function matrice(_taille){
 
 
 var intervalID;
-function demarrer(){
+function Demarrer(){
   var theButton = document.getElementById("theButton");
   theButton.value = "Pause";
-  theButton.removeEventListener("click", demarrer);
+  theButton.removeEventListener("click", Demarrer);
   theButton.addEventListener("click", Pause);
-
+  jeuDepart = jeu;
   intervalID = window.setInterval(iterationSimu, 1000/nbImagesSecs);
 
 }
@@ -79,11 +82,17 @@ function Pause(){
   var theButton = document.getElementById("theButton");
   theButton.value = "démarrer";
   theButton.removeEventListener("click", Pause);
-  theButton.addEventListener("click", demarrer);
+  theButton.addEventListener("click", Demarrer);
 
   window.clearInterval(intervalID);
-  //nbIte = 0;
+}
 
+function Reset(){
+  Pause();
+  jeu = jeuDepart;
+  nbIte = 0;
+  document.getElementById("compteur").innerHTML = 0;
+  gridIteration(jeu);
 }
 
 function iterationSimu(){
