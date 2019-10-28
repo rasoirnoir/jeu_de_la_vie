@@ -1,9 +1,11 @@
 
 var taille = 20; // on décide que la grille sera toujours un carré
-var nbImagesSecs = 1;
+var nbImagesSecs = 2;
 var jeu = matrice(taille);
 var nbIte = 0;
 //console.log(jeu);
+
+//Création d'une grille clickabkle. Quand on clique sur une cellule, sa couleur change
 var grid = clickableGrid(taille,function(el,row,col){
     console.log("You clicked on element:",el);
     console.log("You clicked on row:",row);
@@ -24,7 +26,7 @@ document.body.appendChild(grid);
 
 document.getElementById("theButton").addEventListener("click", demarrer);
 
-//construction de la grille de depart (tut est blanc)
+//Définition d'une grille clickable (par défault, toutes les cellules sont blanches)
 function clickableGrid(_taille, callback ){
     var i=0;
     var grid = document.createElement('table');
@@ -45,6 +47,7 @@ function clickableGrid(_taille, callback ){
 }
 
 //Définition de la matrice qui servira a calculer la grille
+//Cette matrice doit être de la même taille que la grille qui sera affichée à l'écran
 //@_taille on part du principe que la matrice sera toujours carrée
 function matrice(_taille){
   //Initialisation de la matrice de base, où tout est à 0 (blanc, mort)
@@ -54,7 +57,6 @@ function matrice(_taille){
     for(var c = 0; c < _taille; c++){
       //console.log(`r : ${r}, c : ${c}`);
       column[c] = 0;
-      //matrix[r][c] = 0;
     }
     matrix[r] = column;
   }
@@ -65,29 +67,27 @@ function matrice(_taille){
 var intervalID;
 function demarrer(){
   var theButton = document.getElementById("theButton");
-  theButton.value = "stopper";
+  theButton.value = "Pause";
   theButton.removeEventListener("click", demarrer);
-  theButton.addEventListener("click", stopper);
+  theButton.addEventListener("click", Pause);
 
-  //TODO: lancer la simulation
   intervalID = window.setInterval(iterationSimu, 1000/nbImagesSecs);
 
 }
 
-function stopper(){
+function Pause(){
   var theButton = document.getElementById("theButton");
   theButton.value = "démarrer";
-  theButton.removeEventListener("click", stopper);
+  theButton.removeEventListener("click", Pause);
   theButton.addEventListener("click", demarrer);
 
-  //TODO: arrêter la simulation
   window.clearInterval(intervalID);
-  nbIte = 0;
+  //nbIte = 0;
 
 }
 
 function iterationSimu(){
-  //TODO: calculer chaque itération du jeu
+
   console.log(`Itération ${nbIte+1} du jeu !`);
 
   //chaque itération se déroulera en 2 phases

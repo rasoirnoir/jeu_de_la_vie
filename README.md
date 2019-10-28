@@ -2,7 +2,7 @@
 Implémentation d'un automate cellulaire célèbre. Pour le plaisir.
 Le Jeu de la Vie
 
-Les règles sont simple.
+Les règles sont simple:
 
 le jeu se déroule dans une grille potentiellement infinie.
 pour chaque cellule composant cette grille, 2 règles sont à appliquer à chaque tour de jeu:

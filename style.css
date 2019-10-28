@@ -2,6 +2,11 @@ h1{
   text-align: center;
   margin: auto;
 }
+h2{
+  text-align: center;
+  margin: auto;
+  padding: auto;
+}
 
 .grid { margin:1em auto; border-collapse:collapse }
 .grid td {
