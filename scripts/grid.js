@@ -4,10 +4,9 @@ var nbImagesSecs = 2;
 var jeu = matrice(taille);
 var jeuDepart = jeu;
 var nbIte = 0;
-//console.log(jeu);
 
-//Création d'une grille clickabkle. Quand on clique sur une cellule, sa couleur change
-var grid = clickableGrid(taille,function(el,row,col){
+//Création d'une grille clickable. Quand on clique sur une cellule, sa couleur change
+var grid = clickableGrid(taille, function(el,row,col){
     console.log("You clicked on element:",el);
     console.log("You clicked on row:",row);
     console.log("You clicked on col:",col);
@@ -23,7 +22,8 @@ var grid = clickableGrid(taille,function(el,row,col){
 });
 
 
-document.body.appendChild(grid);
+//document.body.appendChild(grid);
+document.getElementById("jeu").appendChild(grid);
 
 document.getElementById("theButton").addEventListener("click", Demarrer);
 document.getElementById("reset").addEventListener("click", Reset);
@@ -38,7 +38,7 @@ function clickableGrid(_taille, callback ){
         var tr = grid.appendChild(document.createElement('tr'));
         for (var c=0;c<_taille;++c){
             var cell = tr.appendChild(document.createElement('td'));
-            //cell.innerHTML = ++i;
+            cell.className = 'white';
             cell.addEventListener('click',(function(el,r,c){
                 return function(){
                     callback(el,r,c);
@@ -68,6 +68,7 @@ function matrice(_taille){
 
 
 var intervalID;
+//Se déclenche au click sur le bouton démarrer.
 function Demarrer(){
   var theButton = document.getElementById("theButton");
   theButton.value = "Pause";
@@ -78,6 +79,7 @@ function Demarrer(){
 
 }
 
+//Se déclenche au click sur le bouton pause
 function Pause(){
   var theButton = document.getElementById("theButton");
   theButton.value = "démarrer";
@@ -87,6 +89,7 @@ function Pause(){
   window.clearInterval(intervalID);
 }
 
+//Se déclenche au click sur le bouton reset
 function Reset(){
   Pause();
   jeu = jeuDepart;
