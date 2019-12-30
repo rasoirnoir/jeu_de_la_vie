@@ -1,38 +1,58 @@
 
-var taille = 20; // on décide que la grille sera toujours un carré
-var nbImagesSecs = 2;
+var taille = elementById("taille").value; // on décide que la grille sera toujours un carré
+//var nbImagesSecs = 2;
 var jeu = matrice(taille);
 var jeuDepart = jeu;
 var nbIte = 0;
 
-//Création d'une grille clickable. Quand on clique sur une cellule, sa couleur change
-var grid = clickableGrid(taille, function(el,row,col){
-    console.log("You clicked on element:",el);
-    console.log("You clicked on row:",row);
-    console.log("You clicked on col:",col);
-
-    if(el.className == 'black'){
-      el.className = 'white';
-      jeu[row][col] = 0;
-    }
-    else{
-      el.className = 'black';
-      jeu[row][col] = 1;
-    }
-});
 
 
-//document.body.appendChild(grid);
-document.getElementById("jeu").appendChild(grid);
+initGame(taille, jeu);
 
-document.getElementById("theButton").addEventListener("click", Demarrer);
-document.getElementById("reset").addEventListener("click", Reset);
+elementById("theButton").addEventListener("click", Demarrer);
+elementById("reset").addEventListener("click", Reset);
+elementById("validTaille").addEventListener("click", function(e){ChangeTaille(elementById("taille").value);});
 
+
+function elementById(id){
+  return document.getElementById(id);
+}
+
+function initGame(_taille, _matrice){
+  //Supprime une éventuelle grille qui aurait été définie précédement
+  while(elementById("jeu").hasChildNodes()){
+    elementById("jeu").removeChild(elementById("jeu").lastChild);
+  }
+
+  taille = _taille;
+  jeu = copyMatrice(taille, _matrice);
+  //Création d'une grille clickable. Quand on clique sur une cellule, sa couleur change
+  var grid = clickableGrid(taille, function(el,row,col){
+      console.log("You clicked on element:",el);
+      console.log("You clicked on row:",row);
+      console.log("You clicked on col:",col);
+
+      if(el.className == 'black'){
+        el.className = 'white';
+        jeu[row][col] = 0;
+      }
+      else{
+        el.className = 'black';
+        jeu[row][col] = 1;
+      }
+  });
+  var cpt = document.createElement('h2');
+  cpt.id = "compteur";
+  cpt.innerHTML = "0";
+  elementById("jeu").appendChild(cpt);
+  elementById("jeu").appendChild(grid);
+}
 
 //Définition d'une grille clickable (par défault, toutes les cellules sont blanches)
 function clickableGrid(_taille, callback ){
     var i=0;
     var grid = document.createElement('table');
+    grid.id = "gridJeu";
     grid.className = 'grid';
     for (var r=0;r<_taille;++r){
         var tr = grid.appendChild(document.createElement('tr'));
@@ -47,6 +67,26 @@ function clickableGrid(_taille, callback ){
         }
     }
     return grid;
+}
+
+//crée une matrice de la taille @_taille avec les valeurs de la matrice source.
+function copyMatrice(_taille, source){
+  var tailleSource = source.length;
+  var matrix = [];
+  for(var r = 0; r < _taille; r++){
+    var column = [];
+    for(var c = 0; c < _taille; c++){
+      //console.log(`r : ${r}, c : ${c}`);
+      if(r >= tailleSource || c >= tailleSource){
+        column[c] = 0;
+      }
+      else{
+        column[c] = source[r][c];
+      }
+    }
+    matrix[r] = column;
+  }
+  return matrix;
 }
 
 //Définition de la matrice qui servira a calculer la grille
@@ -70,6 +110,7 @@ function matrice(_taille){
 var intervalID;
 //Se déclenche au click sur le bouton démarrer.
 function Demarrer(){
+  var nbImagesSecs = document.getElementById("vitesse").value;
   var theButton = document.getElementById("theButton");
   theButton.value = "Pause";
   theButton.removeEventListener("click", Demarrer);
@@ -92,9 +133,16 @@ function Pause(){
 //Se déclenche au click sur le bouton reset
 function Reset(){
   Pause();
-  jeu = jeuDepart;
+  //jeu = jeuDepart;
+  jeu = copyMatrice(taille, jeuDepart);
   nbIte = 0;
   document.getElementById("compteur").innerHTML = 0;
+  gridIteration(jeu);
+}
+
+function ChangeTaille(_taille){
+  taille = _taille;
+  initGame(taille, jeu);
   gridIteration(jeu);
 }
 
@@ -160,11 +208,11 @@ function gridIteration(matrice){
       if(matrice[i][j] == 0){
         //Récupérer la cellule dans le DOM !!
         //grid[i][j].className = 'white';
-        grid.rows[i].getElementsByTagName("td")[j].className = 'white';
+        elementById("gridJeu").rows[i].getElementsByTagName("td")[j].className = 'white';
       }
       else{
         //grid[i][j].className = 'black';
-        grid.rows[i].getElementsByTagName("td")[j].className = 'black';
+        elementById("gridJeu").rows[i].getElementsByTagName("td")[j].className = 'black';
       }
     }
   }

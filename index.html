@@ -13,10 +13,15 @@
   <div id="inputs" class="inline">
     <input type="button" value="demarrer" id="theButton" name="theButton">
     <input type="button" value="reset" id="reset" name="reset">
+    <label for="vitesse">Vitesse : </label>
+    <input type="number" id="vitesse" min="1" max="60" name="vitesse" value="1">
+    <label for="taille">taille de la grille : </label>
+    <input type="text" id="taille" value="30" name="taille">
+    <input type="button" id="validTaille" name="validTaille" value=">">
   </div>
 
   <div id="jeu" class="inline">
-    <h2 id="compteur">0</h2>
+    <!--<h2 id="compteur">0</h2>-->
     <script src="scripts/grid.js"></script>
   </div>
 </body>
